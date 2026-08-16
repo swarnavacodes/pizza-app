@@ -1,0 +1,133 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "username": "pizza-architect",
+  "model": "anthropic/claude-sonnet-4-6",
+  "small_model": "anthropic/claude-sonnet-4-6",
+  "default_agent": "build",
+  "logLevel": "INFO",
+  "share": "manual",
+  "autoupdate": true,
+  "snapshot": true,
+  "instructions": ["AGENTS.md", "docs/architecture.md"],
+  "skills": {
+    "paths": [".opencode/skills"],
+    "urls": []
+  },
+  "agent": {
+    "infrastructure": {
+      "description": "Handles Terraform IaC, LocalStack setup, and AWS resource provisioning",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": {
+          "terraform *": "allow",
+          "tf *": "allow",
+          "localstack *": "allow",
+          "tflint *": "allow",
+          "terraform-docs *": "allow",
+          "*": "ask"
+        },
+        "edit": "allow"
+      }
+    },
+    "backend": {
+      "description": "Builds Lambda functions, API Gateway integrations, DynamoDB access layers, and event handlers in TypeScript",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": {
+          "npm install *": "allow",
+          "npm run *": "allow",
+          "npx *": "allow",
+          "*": "ask"
+        },
+        "edit": "allow"
+      }
+    },
+    "frontend": {
+      "description": "Builds Next.js applications for customer, kitchen, delivery, and admin portals",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": {
+          "npm install *": "allow",
+          "npm run *": "allow",
+          "npx *": "allow",
+          "*": "ask"
+        },
+        "edit": "allow"
+      }
+    },
+    "database": {
+      "description": "Designs DynamoDB tables, GSIs/LSIs, and access patterns; defines Terraform DynamoDB resources",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": { "*": "ask" },
+        "edit": "allow"
+      }
+    },
+    "testing": {
+      "description": "Writes unit, integration, and E2E tests with Vitest and Playwright",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": {
+          "npm test *": "allow",
+          "npx vitest *": "allow",
+          "npx playwright *": "allow",
+          "*": "ask"
+        },
+        "edit": "allow"
+      }
+    },
+    "devops": {
+      "description": "Handles Docker, LocalStack orchestration, CI/CD pipelines, and deployment automation",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": {
+          "docker *": "allow",
+          "docker-compose *": "allow",
+          "awslocal *": "allow",
+          "aws *": "allow",
+          "*": "ask"
+        },
+        "edit": "allow"
+      }
+    },
+    "security": {
+      "description": "Reviews code for security vulnerabilities, IAM policy least-privilege, and secret exposure",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "permission": {
+        "bash": { "*": "ask" },
+        "edit": "deny"
+      }
+    }
+  },
+  "permission": {
+    "bash": {
+      "rm -rf *": "deny",
+      "rm -r *": "deny",
+      "chmod *": "deny",
+      "sudo *": "deny",
+      "*": "ask"
+    },
+    "edit": {
+      "*.env*": "deny",
+      "*.secret*": "deny",
+      "*.key": "deny",
+      "*.pem": "deny",
+      "*.tfstate*": "deny"
+    }
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp"],
+      "enabled": true,
+      "environment": { "BROWSER": "chromium" }
+    }
+  }
+}

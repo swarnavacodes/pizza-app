@@ -1,0 +1,26 @@
+services:
+  floci:
+    image: floci/floci:latest-compat
+    container_name: pizza-floci
+    ports:
+      - "4566:4566"
+      - "6379-6399:6379-6399"
+    environment:
+      FLOCI_HOSTNAME: localhost
+      FLOCI_DEFAULT_REGION: us-east-1
+      FLOCI_DEFAULT_ACCOUNT_ID: "000000000000"
+      FLOCI_STORAGE_MODE: persistent
+      FLOCI_STORAGE_PERSISTENT_PATH: /app/data
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - floci-data:/app/data
+      - ./localstack/init:/etc/floci/init/ready.d:ro
+      - ./localstack/init:/etc/localstack/init/ready.d:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  floci-data:

@@ -1,0 +1,24 @@
+{
+  "name": "@pizza/kitchen",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "esbuild ./src/handlers/process.ts --bundle --platform=node --target=es2022 --keep-arrars --define:process.env.NODE_ENV=production --outfile=./dist/handlers/process.js",
+    "start": "node dist/handlers/process.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-eventbridge": "^3.600.0",
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0",
+    "@pizza/backend-shared": "workspace:^1.0.0",
+    "@pizza/shared": "workspace:^1.0.0",
+    "esbuild": "^0.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "typescript": "^5.8.0"
+  }
+}
